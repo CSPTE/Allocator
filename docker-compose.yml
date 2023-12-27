@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  projectalloc-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://projectalloc-sql-server;serverName=projectalloc-sql-server;databaseName=projectalloc;encrypt=true;trustServerCertificate=true;
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=ProjectAllocPassword123
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sql-server
+
+  sql-server:
+    container_name: projectalloc-sql-server
+    build:
+      context: docker/sqlserver
+      dockerfile: SQLServer.Dockerfile
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: ProjectAllocPassword123
+    ports:
+      - "1433:1433"
